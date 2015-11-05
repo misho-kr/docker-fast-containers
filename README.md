@@ -53,3 +53,18 @@ If you don't want to play this trick then just start the container with the Jenk
 $ docker-compose -f containers/jenkins.yml up jenkins-root
 ```
 
+### Jenkins with [Docker-in-Docker](https://blog.docker.com/2013/09/docker-can-now-run-within-docker/)
+
+For use cases where Jenkins has to build Docker images, this is a classic example of running Docker inside Docker container. It is doable, with some strings attached -- for details reaad Jerome's blog and follow the link to his GitHub repo. 
+
+What is provided here is two seperate images:
+
+* Jenkins with Docker version 1.8
+* Jenkins with Docker version 1.9
+
+Note that both containers will run Jenkins as root. So if you are running on you machine Docker v1.9 (latest and greatest atm) then pick the latter one:
+
+```bash
+$ docker-compose -f containers/jenkins.yml up jenkins-dind-1_9
+```
+

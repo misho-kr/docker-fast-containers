@@ -15,3 +15,28 @@ jenkins-root:
   extends:
     service: jenkins
   user: root
+
+jenkins-dind-1_8:
+  build: .
+  dockerfile: Dockerfile.jenkins-dind.1_8
+  container_name: jenkins_dind_1.8
+  ports:
+   - "8080:8080"
+  volumes:
+   - ../data/jenkins.dir:/var/jenkins_home
+   - /var/run/docker.sock:/var/run/docker.sock
+  user: root
+  privileged: true
+
+jenkins-dind-1_9:
+  build: .
+  dockerfile: Dockerfile.jenkins-dind.1_9
+  container_name: jenkins_dind_1.9
+  ports:
+   - "8080:8080"
+  volumes:
+   - ../data/jenkins.dir:/var/jenkins_home
+   - /var/run/docker.sock:/var/run/docker.sock
+  user: root
+  privileged: true
+
