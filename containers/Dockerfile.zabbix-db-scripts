@@ -1,0 +1,19 @@
+FROM centos:7
+MAINTAINER misho-kr@github.com
+
+RUN rpm -ivh http://repo.zabbix.com/zabbix/2.4/rhel/7/x86_64/zabbix-release-2.4-1.el7.noarch.rpm
+RUN \
+    yum install --downloadonly --downloaddir=. -y zabbix-server-mysql   && \
+    rpm -ivh --nodeps zabbix-server-mysql-*.rpm                         && \
+    cd /usr/share/doc/zabbix-server-mysql-2.4.*/create                  && \
+                                                                           \
+    mkdir /docker-entrypoint-initdb.d                                   && \
+    echo "use zabbix;" | cat - schema.sql > /docker-entrypoint-initdb.d/2_schema.sql && \
+    echo "use zabbix;" | cat - images.sql > /docker-entrypoint-initdb.d/3_images.sql && \
+    echo "use zabbix;" | cat - data.sql   > /docker-entrypoint-initdb.d/4_data.sql   && \
+                                                                           \
+    rm -f *.rpm
+
+ADD create_db.sql /docker-entrypoint-initdb.d/1_create_db.sql
+
+CMD ["/bin/true"]

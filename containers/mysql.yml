@@ -1,0 +1,30 @@
+---
+# MySQL database
+
+mysql5:
+  image:   mysql:5.7.5
+  ports:
+   - "3306:3306"
+  expose:
+   - "3306"
+  volumes:
+   - ../data/mysql.db:/var/lib/mysql
+  restart: always
+  cpu_shares: 512
+  mem_limit:  256M
+  environment:
+   - MYSQL_ROOT_PASSWORD=root
+   - MYSQL_DATABASE=first_db
+   - MYSQL_USER=user
+   - MYSQL_PASSWORD=password
+
+cli:
+  image:   mysql:5.7.5
+  command: mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE}
+  cpu_shares: 128
+  mem_limit:  128M
+  environment:
+   - MYSQL_PORT=3306
+   - MYSQL_DATABASE=first_db
+   - MYSQL_USER=user
+   - MYSQL_PASSWORD=password

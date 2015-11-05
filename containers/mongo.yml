@@ -1,0 +1,21 @@
+---
+# MongoDB database (smallfiles)
+
+mongo26:
+  image:   mongo:2.6
+  command: /entrypoint.sh --smallfiles
+  ports:
+   - "21017:21017"
+  expose:
+   - "21017"
+  volumes:
+   - ../data/mongo.db:/data/db
+  restart: always
+  cpu_shares: 512
+  mem_limit:  128M
+
+mongo:
+  image:   mongo:2.6
+  command: mongo
+  cpu_shares: 128
+  mem_limit:  128M

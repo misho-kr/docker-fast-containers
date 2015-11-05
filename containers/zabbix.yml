@@ -1,0 +1,47 @@
+---
+# Zabbix server with separate containers for:
+#  - database
+#  - server
+#  - frontend
+
+db_scripts:
+  build: .
+  dockerfile: Dockerfile.zabbix-db-scripts
+  container_name: zabbix_db_scripts
+  command: /bin/true
+  volumes:
+   - /docker-entrypoint-initdb.d
+
+db:
+  image: mysql:5.7
+  container_name: zabbix_db
+  volumes_from:
+   - db_scripts
+  environment:
+   MYSQL_ROOT_PASSWORD: mysql-passwd
+
+server:
+  build: .
+  dockerfile: Dockerfile.zabbix-server
+  container_name: zabbix_server
+  links:
+   - db:db
+#   command: /usr/sbin/zabbix_server -c /etc/zabbix/zabbix_server.conf
+  cap_add:
+   - SYS_ADMIN
+  volumes:
+   - /sys/fs/cgroup:/sys/fs/cgroup:ro
+
+frontend:
+  build: .
+  dockerfile: Dockerfile.zabbix-frontend
+  container_name: zabbix_frontend
+  expose:
+   - 80:80
+  links:
+   - db:db
+   - server:server
+  cap_add:
+   - SYS_ADMIN
+  volumes:
+   - /sys/fs/cgroup:/sys/fs/cgroup:ro

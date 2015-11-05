@@ -1,0 +1,32 @@
+---
+# Redis database (plain vanilla, memory only, no disk persistance)
+
+redis2mem:
+  image:   redis:2.8
+  ports:
+   - "6379:6379"
+  expose:
+   - "6379"
+  restart: always
+  cpu_shares: 512
+  mem_limit:  128M
+
+redis2:
+  image:   redis:2.8
+  command: "/entrypoint.sh redis-server --appendonly yes"
+  ports:
+   - "6379:6379"
+  expose:
+   - "6379"
+  volumes:
+   - ../data/redis.dir:/data
+  restart: always
+  cpu_shares: 512
+  mem_limit:  128M
+
+cli:
+  image:   redis:2.8
+  command: redis-cli
+  cpu_shares: 128
+  mem_limit:  128M
+
