@@ -1,0 +1,17 @@
+---
+# Jenknis build server
+
+jenkins:
+  image:   jenkins
+  ports:
+   - "8080:8080"
+  volumes:
+   - ../data/jenkins.dir:/var/jenkins_home
+  restart: always
+  cpu_shares: 512
+  mem_limit:  1024M
+
+jenkins-root:
+  extends:
+    service: jenkins
+  user: root
