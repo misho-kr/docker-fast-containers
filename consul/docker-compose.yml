@@ -1,0 +1,30 @@
+---
+# Consul -- service discovery and K/V store tool
+# ref: https://www.consul.io/
+
+version: "2"
+
+services:
+
+  dev:
+    image:    consul
+    expose:
+     - "8400"
+     - "8500"
+     - "8600"
+     - "8600/udp"
+    volumes:
+     - ./data:/consul/data
+    network_mode: host
+    restart: always
+    cpu_shares: 512
+    mem_limit:  128M
+
+  cli:
+    image:    consul
+    volumes:
+     - ./data:/consul/data
+    network_mode: host
+    restart: always
+    cpu_shares: 128
+    mem_limit:  128M
