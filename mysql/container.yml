@@ -1,8 +1,22 @@
 ---
-# MySQL database
+# MySQL database in Docker container
+
+mysql:
+  image:   mysql:latest
+  ports:
+   - "3306:3306"
+  expose:
+   - "3306"
+  volumes:
+   - ../data/mysql.db:/var/lib/mysql
+  restart: always
+  cpu_shares: 512
+  mem_limit:  512M
+  env_file:
+    mysql_conn_params.env
 
 mysql5:
-  image:   mysql:5.7.17
+  image:   mysql:5
   ports:
    - "3306:3306"
   expose:
@@ -16,7 +30,7 @@ mysql5:
     mysql_conn_params.env
 
 cli:
-  image:   mysql:5.7.17
+  image:   mysql:latest
   command: sh -c "mysql -hmysql5 -P$${MYSQL_PORT} -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} $${MYSQL_DATABASE}"
   cpu_shares: 128
   mem_limit:  128M
@@ -28,7 +42,7 @@ cli:
   tty: true
 
 cli-root:
-  image:   mysql:5.7.17
+  image:   mysql:latest
   command: sh -c "mysql -hmysql5 -P$${MYSQL_PORT} -uroot -p$${MYSQL_ROOT_PASSWORD} $${MYSQL_DATABASE}"
   cpu_shares: 128
   mem_limit:  128M
